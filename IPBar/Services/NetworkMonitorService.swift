@@ -173,7 +173,9 @@ final class NetworkMonitorService: NSObject, CLLocationManagerDelegate {
             )
             guard result == 0 else { continue }
 
-            let addressString = String(cString: hostname)
+            let addressString = hostname.withUnsafeBufferPointer { buf in
+                String(cString: buf.baseAddress!)
+            }
 
             // Skip link-local IPv6 (fe80::)
             if family == UInt8(AF_INET6) && addressString.hasPrefix("fe80:") {
