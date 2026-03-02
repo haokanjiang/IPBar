@@ -1,0 +1,29 @@
+PROJECT  := IPBar.xcodeproj
+SCHEME   := IPBar
+CONFIG   := Debug
+BUILD_DIR := build
+
+APP_NAME := IPBar.app
+APP_PATH := $(BUILD_DIR)/Build/Products/$(CONFIG)/$(APP_NAME)
+
+.PHONY: all generate build run clean
+
+all: build
+
+generate:
+	xcodegen generate
+
+build: generate
+	xcodebuild build \
+		-project $(PROJECT) \
+		-scheme $(SCHEME) \
+		-configuration $(CONFIG) \
+		-derivedDataPath $(BUILD_DIR) \
+		-quiet
+
+run: build
+	open $(APP_PATH)
+
+clean:
+	rm -rf $(BUILD_DIR)
+	xcodebuild clean -project $(PROJECT) -scheme $(SCHEME) -quiet 2>/dev/null || true
